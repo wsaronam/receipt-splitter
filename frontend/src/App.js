@@ -11,6 +11,17 @@ function App() {
   const [uploading, setUploading] = useState(false);
 
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file);
+    }
+    else {
+      // need something else here
+      setSelectedFile(null);
+    }
+  }
+  
   const handleUpload = async () => {
     if (!selectedFile) return;
 
@@ -19,7 +30,21 @@ function App() {
     const formData = new FormData();
     formData.append('receipt', selectedFile);
     
-    // more stuff goes here
+    try {
+      const response = await fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      // console.log(data);
+    }
+    catch (error) {
+      console.log('Error in uploading')
+    }
+    finally {
+      setUploading(false);
+    }
   }
   
   const handleClear = () => {
@@ -38,8 +63,10 @@ function App() {
 
       <div className="upload-container">
         <input
+          id="fileInput"
           type="file"
           accept="image/*"
+          onChange={handleFileSelect}
         />
       </div>
 
