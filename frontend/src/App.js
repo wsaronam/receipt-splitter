@@ -9,19 +9,35 @@ import logo from './logo.svg';
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState(null);
 
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
       setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
     }
     else {
       // need something else here
       setSelectedFile(null);
     }
   }
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  }
   
+
   const handleUpload = async () => {
     if (!selectedFile) return;
 
@@ -49,7 +65,9 @@ function App() {
   
   const handleClear = () => {
     setSelectedFile(null);
+    setPreview(null);
   }
+  
 
 
 
@@ -62,12 +80,32 @@ function App() {
       </header>
 
       <div className="upload-container">
-        <input
-          id="fileInput"
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-        />
+
+        <div 
+          className="drop-area"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onClick={() => document.getElementById('fileInput').click()}
+        >
+
+          {preview ? (
+            <img src={preview} />
+          ) : (
+            <div>
+              <p>Drag and drop receipt image here</p>
+              <p>or click to browse</p>
+            </div>
+          )}
+        
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+          />
+        </div>
+
+        
       </div>
 
       {selectedFile && (
@@ -80,6 +118,7 @@ function App() {
           </button>
         </div>
       )}
+      
 
 
     </div>
