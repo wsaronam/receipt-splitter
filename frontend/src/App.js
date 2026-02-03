@@ -9,6 +9,7 @@ import logo from './logo.svg';
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
   const [preview, setPreview] = useState(null);
 
 
@@ -17,10 +18,10 @@ function App() {
     if (file && file.type.startsWith('image/')) {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
+      setUploadStatus('');
     }
     else {
-      // need something else here
-      setSelectedFile(null);
+      setUploadStatus('Please select a valid image file');
     }
   }
 
@@ -30,6 +31,7 @@ function App() {
     if (file && file.type.startsWith('image/')) {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
+      setUploadStatus('');
     }
   };
 
@@ -42,21 +44,30 @@ function App() {
     if (!selectedFile) return;
 
     setUploading(true);
+    setUploadStatus('Uploading...');
 
     const formData = new FormData();
     formData.append('receipt', selectedFile);
     
     try {
+      console.log('sending file:', selectedFile.name);
       const response = await fetch('http://localhost:5000/upload', {
         method: 'POST',
         body: formData,
       });
 
+      console.log('response status: ' + response.status);
       const data = await response.json();
-      // console.log(data);
+      console.log('server response: ' + JSON.stringify(data, null, 2));
+      if (response.ok) {
+        setUploadStatus('Receipt uploaded successfully');
+      }
+      else {
+        setUploadStatus('Upload failed: ' + data.error);
+      }
     }
     catch (error) {
-      console.log('Error in uploading')
+      setUploadStatus('Error uploading image: ' + error.message);
     }
     finally {
       setUploading(false);
@@ -104,8 +115,6 @@ function App() {
             onChange={handleFileSelect}
           />
         </div>
-
-        
       </div>
 
       {selectedFile && (
@@ -119,7 +128,11 @@ function App() {
         </div>
       )}
       
-
+      {uploadStatus && (
+        <div>
+          {uploadStatus}
+        </div>
+      )}
 
     </div>
   );
