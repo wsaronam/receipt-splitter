@@ -100,9 +100,9 @@ function App() {
         >
 
           {preview ? (
-            <img src={preview} />
+            <img src={preview} className="preview-image" />
           ) : (
-            <div>
+            <div className="drop-area-text">
               <p>Drag and drop receipt image here</p>
               <p>or click to browse</p>
             </div>
@@ -113,23 +113,24 @@ function App() {
             type="file"
             accept="image/*"
             onChange={handleFileSelect}
+            style={{ display: 'none' }}
           />
         </div>
       </div>
 
       {selectedFile && (
-        <div>
+        <div className="actions">
           <button onClick={handleUpload} disabled={uploading}>
             {uploading ? "Uploading..." : "Upload & Process"}
           </button>
-          <button onClick={handleClear}>
+          <button onClick={handleClear} className="second-button">
             Clear
           </button>
         </div>
       )}
       
       {uploadStatus && (
-        <div>
+        <div className={`status ${uploadStatus.includes('success') ? 'success' : 'error'}`}>
           {uploadStatus}
         </div>
       )}
