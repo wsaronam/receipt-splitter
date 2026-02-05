@@ -11,6 +11,7 @@ function App() {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [preview, setPreview] = useState(null);
+  const [ocrResults, setOcrResults] = useState(null);
 
 
   const handleFileSelect = (e) => {
@@ -19,6 +20,7 @@ function App() {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
       setUploadStatus('');
+      setOcrResults(null);
     }
     else {
       setUploadStatus('Please select a valid image file');
@@ -32,6 +34,7 @@ function App() {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
       setUploadStatus('');
+      setOcrResults(null);
     }
   };
 
@@ -45,6 +48,7 @@ function App() {
 
     setUploading(true);
     setUploadStatus('Uploading...');
+    setOcrResults(null);
 
     const formData = new FormData();
     formData.append('receipt', selectedFile);
@@ -58,9 +62,10 @@ function App() {
 
       console.log('response status: ' + response.status);
       const data = await response.json();
-      console.log('server response: ' + JSON.stringify(data, null, 2));
       if (response.ok) {
-        setUploadStatus('Receipt uploaded successfully');
+        setUploadStatus(`Receipt uploaded successfully.  Found ${data.items_found} items`);
+        setOcrResults(data);
+        console.log('server response: ' + JSON.stringify(data, null, 2));
       }
       else {
         setUploadStatus('Upload failed: ' + data.error);
@@ -68,6 +73,7 @@ function App() {
     }
     catch (error) {
       setUploadStatus('Error uploading image: ' + error.message);
+      console.error('Upload error: ' + error);
     }
     finally {
       setUploading(false);
@@ -77,6 +83,8 @@ function App() {
   const handleClear = () => {
     setSelectedFile(null);
     setPreview(null);
+    setUploadStatus('');
+    setOcrResults(null);
   }
   
 
@@ -132,6 +140,12 @@ function App() {
       {uploadStatus && (
         <div className={`status ${uploadStatus.includes('success') ? 'success' : 'error'}`}>
           {uploadStatus}
+        </div>
+      )}
+
+      {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
+        <div>
+          <h2>Extracted Items</h2>
         </div>
       )}
 

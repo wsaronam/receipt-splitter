@@ -1,8 +1,11 @@
 import os
+import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from PIL import Image
+import pytesseract
 
 
 
@@ -30,6 +33,31 @@ def allowed_file(filename):
     file_extension = filename.rsplit('.', 1)[1].lower()
     return file_extension in ALLOWED_EXTENSIONS
 
+def extract_items_from_text(text):
+    items = []
+    lines = text.split('\n')
+    # matches price-like strings (eg, $12.99, 12.99, $12)
+    price_pattern = re.compile(r'\$?\d+\.?\d{0,2}')
+
+    for line in lines:
+        line = line.strip()
+        print(line)
+        if line:
+            prices = price_pattern.findall(line)
+            if prices:
+                priceStr = prices[-1].replace('$', '')
+                try:
+                    price = float(priceStr)
+                    itemName = re.sub(price_pattern, '', line).strip()
+                    if itemName and 0 < price < 1000: # if it's a reasonable price?
+                        items.append({
+                            'name': itemName,
+                            'price': price
+                        })
+                except ValueError:
+                    continue
+    return items                
+
 
 @app.route('/status', methods=['GET'])
 def check_status():
@@ -53,11 +81,19 @@ def upload_receipt():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
-    return jsonify({
-        'message': 'Receipt uploaded successfully',
-        'filename': filename,
-        'filepath': filepath
-    }), 200
+    try:
+        image = Image.open(filepath)
+        extractedText = pytesseract.image_to_string(image)
+        items = extract_items_from_text(extractedText)
+        return jsonify({
+            'message': 'Receipt processed successfully',
+            'filename': filename,
+            'raw_text': extractedText,
+            'items': items,
+            'items_found': len(items)
+        }), 200
+    except Exception as e:
+        return jsonify({'error': f'Error processing receipt: {str(e)}'}), 500
 
 
 
