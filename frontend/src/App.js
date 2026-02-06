@@ -124,31 +124,60 @@ function App() {
             style={{ display: 'none' }}
           />
         </div>
+
+        {selectedFile && (
+          <div className="actions">
+            <button onClick={handleUpload} disabled={uploading}>
+              {uploading ? "Uploading..." : "Upload & Process"}
+            </button>
+            <button onClick={handleClear} className="second-button">
+              Clear
+            </button>
+          </div>
+        )}
+        
+        {uploadStatus && (
+          <div className={`status ${uploadStatus.includes('success') ? 'success' : 'error'}`}>
+            {uploadStatus}
+          </div>
+        )}
+
+        {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
+          <div className="results-container">
+            <h2>Extracted Items</h2>
+            <div className="items-list">
+              {ocrResults.items.map((item, index) => 
+                <div key={index} className="item-card">
+                  <span className="item-name">{item.name}</span>
+                  <span className="item-price">{item.price.toFixed(2)}</span>
+                </div>
+              )}
+            </div>
+            <div className="total-price">
+              <strong>Total: </strong>
+              ${ocrResults.items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+            </div>
+
+            {ocrResults.raw_text && (
+              <details className="raw-text">
+                <summary>View Raw OCR Text Results</summary>
+                <pre>{ocrResults.raw_text}</pre>
+              </details>
+            )}
+          </div>
+        )}
+
+        {ocrResults && ocrResults.items && ocrResults.items.length === 0 && (
+          <div className="no-items">
+            <p>No items detected.  Receipt may unreadable or in a wrong format.  Please try again.</p>
+            <details className="raw-text">
+              <summary>View Raw OCR Text Results</summary>
+              <pre>{ocrResults.raw_text}</pre>
+            </details>
+          </div>
+        )}
+        
       </div>
-
-      {selectedFile && (
-        <div className="actions">
-          <button onClick={handleUpload} disabled={uploading}>
-            {uploading ? "Uploading..." : "Upload & Process"}
-          </button>
-          <button onClick={handleClear} className="second-button">
-            Clear
-          </button>
-        </div>
-      )}
-      
-      {uploadStatus && (
-        <div className={`status ${uploadStatus.includes('success') ? 'success' : 'error'}`}>
-          {uploadStatus}
-        </div>
-      )}
-
-      {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
-        <div>
-          <h2>Extracted Items</h2>
-        </div>
-      )}
-
     </div>
   );
 }
