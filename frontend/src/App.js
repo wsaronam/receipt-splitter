@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
-
 import logo from './logo.svg';
+
+import ReceiptUpload from './components/ReceiptUpload';
+import ItemsList from './components/ItemsList';
 
 
 
@@ -13,6 +15,10 @@ function App() {
   const [preview, setPreview] = useState(null);
   const [ocrResults, setOcrResults] = useState(null);
 
+  const [people, setPeople] = useState([]);
+  const [itemAssignments, setItemAssignments] = useState({});
+
+
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -21,11 +27,12 @@ function App() {
       setPreview(URL.createObjectURL(file));
       setUploadStatus('');
       setOcrResults(null);
+      setItemAssignments({});
     }
     else {
       setUploadStatus('Please select a valid image file');
     }
-  }
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -35,12 +42,13 @@ function App() {
       setPreview(URL.createObjectURL(file));
       setUploadStatus('');
       setOcrResults(null);
+      setItemAssignments({});
     }
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
-  }
+  };
   
 
   const handleUpload = async () => {
@@ -78,15 +86,33 @@ function App() {
     finally {
       setUploading(false);
     }
-  }
+  };
   
   const handleClear = () => {
     setSelectedFile(null);
     setPreview(null);
     setUploadStatus('');
     setOcrResults(null);
-  }
+    setItemAssignments({});
+  };
   
+
+  const addPerson = () => {
+
+  };
+
+  const removePerson = (name) => {
+
+  };
+
+  const setPersonItem = () => {
+    // set each item to belong to person
+  };
+
+  const calculateSplit = () => {
+    // calculate how much everyone owes for the receipt
+  };
+
 
 
 
@@ -100,71 +126,22 @@ function App() {
 
       <div className="upload-container">
 
-        <div 
-          className="drop-area"
+        <ReceiptUpload
+          preview={preview}
+          onFileSelect={handleFileSelect}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          onClick={() => document.getElementById('fileInput').click()}
-        >
-
-          {preview ? (
-            <img src={preview} className="preview-image" />
-          ) : (
-            <div className="drop-area-text">
-              <p>Drag and drop receipt image here</p>
-              <p>or click to browse</p>
-            </div>
-          )}
-        
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            onChange={handleFileSelect}
-            style={{ display: 'none' }}
-          />
-        </div>
-
-        {selectedFile && (
-          <div className="actions">
-            <button onClick={handleUpload} disabled={uploading}>
-              {uploading ? "Uploading..." : "Upload & Process"}
-            </button>
-            <button onClick={handleClear} className="second-button">
-              Clear
-            </button>
-          </div>
-        )}
-        
-        {uploadStatus && (
-          <div className={`status ${uploadStatus.includes('success') ? 'success' : 'error'}`}>
-            {uploadStatus}
-          </div>
-        )}
+          onUpload={handleUpload}
+          onClear={handleClear}
+          uploading={uploading}
+          uploadStatus={uploadStatus}
+        />
 
         {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
-          <div className="results-container">
-            <h2>Extracted Items</h2>
-            <div className="items-list">
-              {ocrResults.items.map((item, index) => 
-                <div key={index} className="item-card">
-                  <span className="item-name">{item.name}</span>
-                  <span className="item-price">{item.price.toFixed(2)}</span>
-                </div>
-              )}
-            </div>
-            <div className="total-price">
-              <strong>Total: </strong>
-              ${ocrResults.items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
-            </div>
-
-            {ocrResults.raw_text && (
-              <details className="raw-text">
-                <summary>View Raw OCR Text Results</summary>
-                <pre>{ocrResults.raw_text}</pre>
-              </details>
-            )}
-          </div>
+          <ItemsList
+            items={ocrResults.items}
+            rawText={ocrResults.raw_text}
+          />
         )}
 
         {ocrResults && ocrResults.items && ocrResults.items.length === 0 && (
