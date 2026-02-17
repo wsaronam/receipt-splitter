@@ -5,6 +5,7 @@ import '../styles/ItemsList.css';
 
 function ItemsList ({
     items,
+    people,
     rawText
 }) {
     return (
@@ -18,6 +19,18 @@ function ItemsList ({
                 </div>
               )}
             </div>
+
+            {people.length > 0 && (
+                <div>
+                    {people.map((person, index) => (
+                        <button
+                            key={index}
+                        >
+                            {person}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             <div className="total-price">
                 <strong>Total: </strong>

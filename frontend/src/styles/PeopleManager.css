@@ -1,0 +1,76 @@
+.people-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #d6d6d6;
+}
+
+.people-section h2 {
+    color: #667eea;;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+
+.add-person {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.add-person input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #d6d6d6;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.add-person input:focus {
+    outline: none;
+    border-color: #d6d6d6;
+}
+
+
+.add-btn {
+    padding: 12px 30px;
+    font-size: 1em;
+}
+
+.remove-btn {
+    background: #5a5a5a;;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 1.2em;
+    cursor: pointer;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.remove-btn:hover {
+    background: #414141;;
+}
+
+
+.people-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.person-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: #667eea;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.95em;
+}

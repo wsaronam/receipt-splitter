@@ -4,6 +4,7 @@ import logo from './logo.svg';
 
 import ReceiptUpload from './components/ReceiptUpload';
 import ItemsList from './components/ItemsList';
+import PeopleManager from './components/PeopleManager';
 
 
 
@@ -16,6 +17,7 @@ function App() {
   const [ocrResults, setOcrResults] = useState(null);
 
   const [people, setPeople] = useState([]);
+  const [newPersonName, setNewPersonName] = useState('');
   const [itemAssignments, setItemAssignments] = useState({});
 
 
@@ -98,11 +100,14 @@ function App() {
   
 
   const addPerson = () => {
-
+    if (newPersonName.trim() && !people.includes(newPersonName.trim())) {
+      setPeople([...people, newPersonName.trim()]);
+      setNewPersonName('');
+    }
   };
 
-  const removePerson = (name) => {
-
+  const removePerson = (personName) => {
+    setPeople(people.filter(p => p !== personName));
   };
 
   const setPersonItem = () => {
@@ -138,10 +143,21 @@ function App() {
         />
 
         {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
-          <ItemsList
-            items={ocrResults.items}
-            rawText={ocrResults.raw_text}
-          />
+          <div>
+            <PeopleManager
+              people={people}
+              newPersonName={newPersonName}
+              onNameChange={setNewPersonName}
+              onAddPerson={addPerson}
+              onRemovePerson={removePerson}
+            />
+
+            <ItemsList
+              items={ocrResults.items}
+              people={people}
+              rawText={ocrResults.raw_text}
+            />
+          </div>
         )}
 
         {ocrResults && ocrResults.items && ocrResults.items.length === 0 && (
