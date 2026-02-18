@@ -5,6 +5,7 @@ import logo from './logo.svg';
 import ReceiptUpload from './components/ReceiptUpload';
 import ItemsList from './components/ItemsList';
 import PeopleManager from './components/PeopleManager';
+import SplitSummary from './components/SplitSummary';
 
 
 
@@ -19,6 +20,7 @@ function App() {
   const [people, setPeople] = useState([]);
   const [newPersonName, setNewPersonName] = useState('');
   const [itemAssignments, setItemAssignments] = useState({});
+
 
 
 
@@ -116,7 +118,14 @@ function App() {
 
   const calculateSplit = () => {
     // calculate how much everyone owes for the receipt
+    const splits = {
+      'John': 3,
+      'Rob': 1.44444444444
+    };
+    return splits;
   };
+
+  const splits = calculateSplit(); // DELETE LATER
 
 
 
@@ -155,6 +164,12 @@ function App() {
             <ItemsList
               items={ocrResults.items}
               people={people}
+              itemAssignments={itemAssignments}
+              onSetPerson={setPersonItem}
+            />
+
+            <SplitSummary
+              splits={splits}
               rawText={ocrResults.raw_text}
             />
           </div>
