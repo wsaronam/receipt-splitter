@@ -120,7 +120,8 @@ function App() {
     // calculate how much everyone owes for the receipt
     const splits = {
       'John': 3,
-      'Rob': 1.44444444444
+      'Rob': 1.44444444444,
+      ' Jacob    ': 1111.234
     };
     return splits;
   };

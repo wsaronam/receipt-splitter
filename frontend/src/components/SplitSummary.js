@@ -23,13 +23,13 @@ function SplitSummary({
 
 
     return (
-        <div>
+        <div className="split-summary">
             <h2>Split Summary</h2>
-            <div>
+            <div className="split-cards">
                 {people.map((person, index) => (
-                    <div key={index}>
-                        <div>{person}</div>
-                        <div>${splits[person].toFixed(2)}</div>
+                    <div key={index} className="split-card">
+                        <div className="person-name">{person}</div>
+                        <div className="person-total">${splits[person].toFixed(2)}</div>
                     </div>
                 ))}
             </div>
