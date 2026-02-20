@@ -19,19 +19,22 @@
 }
 
 .item-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
+  padding: 20px;
   background: #f8f9ff;
   border-radius: 10px;
   border-left: 4px solid #667eea;
-  transition: all 0.2s ease;
 }
 
 .item-card:hover {
   background: #f0f1ff;
   transform: translateX(5px);
+}
+
+.item-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .item-name {

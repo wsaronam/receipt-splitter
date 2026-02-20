@@ -112,21 +112,51 @@ function App() {
     setPeople(people.filter(p => p !== personName));
   };
 
-  const setPersonItem = () => {
-    // set each item to belong to person
+  const setPersonItem = (index, name) => {
+    const currentAssignments = itemAssignments[index] || [];
+    if (currentAssignments.includes(name)) {
+      setItemAssignments({
+        ...itemAssignments,
+        [index]: currentAssignments.filter(p => p!== name)
+      });
+    }
+    else {
+      setItemAssignments({
+        ...itemAssignments,
+        [index]: [...currentAssignments, name]
+      });
+    }
   };
 
   const calculateSplit = () => {
-    // calculate how much everyone owes for the receipt
-    const splits = {
-      'John': 3,
-      'Rob': 1.44444444444,
-      ' Jacob    ': 1111.234
-    };
+    const splits = {};
+    people.forEach(person => {
+      splits[person] = 0;
+    });
+
+    if (!ocrResults || !ocrResults.items) {
+      return splits;
+    }
+
+    ocrResults.items.forEach((item, index) => {
+      const assignedPeople = itemAssignments[index] || [];
+      if (assignedPeople.length > 0) {
+        const splitAmount = item.price / assignedPeople.length;
+        assignedPeople.forEach(person => {
+          splits[person] += splitAmount;
+        });
+      }
+    });
+
+    // const splits = {
+    //   'John': 3,
+    //   'Rob': 1.44444444444,
+    //   ' Jacob    ': 1111.234
+    // };
     return splits;
   };
 
-  const splits = calculateSplit(); // DELETE LATER
+  const splits = calculateSplit();
 
 
 

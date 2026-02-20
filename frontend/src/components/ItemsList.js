@@ -11,29 +11,31 @@ function ItemsList ({
 }) {
     return (
         <div className="results-container">
-            <h2>Extracted Items</h2>
+            <h2>Assign Items!</h2>
             <div className="items-list">
-              {items.map((item, index) => 
-                <div key={index} className="item-card">
-                    <span className="item-name">{item.name}</span>
-                    <span className="item-price">{item.price.toFixed(2)}</span>
-                </div>
-              )}
-            </div>
+                {items.map((item, index) => (
+                    <div key={index} className="item-card">
+                        <div className="item-info">
+                            <span className="item-name">{item.name}</span>
+                            <span className="item-price">${item.price.toFixed(2)}</span>
+                        </div>
 
-            {people.length > 0 && (
-                <div className="person-buttons">
-                    {people.map((person, index) => (
-                        <button
-                            key={index}
-                            className={`person-toggle ${(itemAssignments[index] || []).includes(person) ? 'active' : ''}`}
-                            onClick={() => onSetPerson(index, person)}
-                        >
-                            {person}
-                        </button>
-                    ))}
-                </div>
-            )}
+                        {people.length > 0 && (
+                            <div className="person-buttons">
+                                {people.map((person, index) => (
+                                    <button
+                                        key={index}
+                                        className={`person-toggle ${(itemAssignments[index] || []).includes(person) ? 'active' : ''}`}
+                                        onClick={() => onSetPerson(index, person)}
+                                    >
+                                        {person}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
