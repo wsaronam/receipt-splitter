@@ -72,7 +72,7 @@
   box-shadow: none;
 }
 
-.person-toggle:active {
+.person-toggle.active {
   background: #667eea;
   color: white;
 }

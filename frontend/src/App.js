@@ -21,6 +21,9 @@ function App() {
   const [newPersonName, setNewPersonName] = useState('');
   const [itemAssignments, setItemAssignments] = useState({});
 
+  const [editingItemIndex, setEditingItemIndex] = useState(null);
+  const [editedItems, setEditedItems] = useState({});
+
 
 
 
@@ -110,14 +113,22 @@ function App() {
 
   const removePerson = (personName) => {
     setPeople(people.filter(p => p !== personName));
+
+    const newAssignments = {...itemAssignments};
+    Object.keys(newAssignments).forEach(index => {
+      newAssignments[index] = newAssignments[index].filter(p => p !== personName);
+    });
+    setItemAssignments(newAssignments);
   };
 
   const setPersonItem = (index, name) => {
+    console.log('clicked item:', index, 'person:', name);
+    console.log('current assignments:', itemAssignments);
     const currentAssignments = itemAssignments[index] || [];
     if (currentAssignments.includes(name)) {
       setItemAssignments({
         ...itemAssignments,
-        [index]: currentAssignments.filter(p => p!== name)
+        [index]: currentAssignments.filter(p => p !== name)
       });
     }
     else {
@@ -147,12 +158,7 @@ function App() {
         });
       }
     });
-
-    // const splits = {
-    //   'John': 3,
-    //   'Rob': 1.44444444444,
-    //   ' Jacob    ': 1111.234
-    // };
+    
     return splits;
   };
 

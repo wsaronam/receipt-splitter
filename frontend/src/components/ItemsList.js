@@ -13,8 +13,8 @@ function ItemsList ({
         <div className="results-container">
             <h2>Assign Items!</h2>
             <div className="items-list">
-                {items.map((item, index) => (
-                    <div key={index} className="item-card">
+                {items.map((item, itemIndex) => (
+                    <div key={itemIndex} className="item-card">
                         <div className="item-info">
                             <span className="item-name">{item.name}</span>
                             <span className="item-price">${item.price.toFixed(2)}</span>
@@ -22,11 +22,11 @@ function ItemsList ({
 
                         {people.length > 0 && (
                             <div className="person-buttons">
-                                {people.map((person, index) => (
+                                {people.map((person, personIndex) => (
                                     <button
-                                        key={index}
-                                        className={`person-toggle ${(itemAssignments[index] || []).includes(person) ? 'active' : ''}`}
-                                        onClick={() => onSetPerson(index, person)}
+                                        key={personIndex}
+                                        className={`person-toggle ${(itemAssignments[itemIndex] || []).includes(person) ? 'active' : ''}`}
+                                        onClick={() => onSetPerson(itemIndex, person)}
                                     >
                                         {person}
                                     </button>
