@@ -162,6 +162,64 @@ function App() {
     return splits;
   };
 
+
+  const startEditingItem = (index, item) => {
+    setEditingItemIndex(index);
+    setEditedItems({
+      ...editedItems,
+      [index]: {name: item.name, price: item.price}
+    });
+  };
+
+  const cancelEditingItem = () => {
+    setEditingItemIndex(null);
+  }
+
+  const saveEditedItem = (index) => {
+    if (editedItems[index]) {
+      const updatedItems = [...ocrResults.items];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        name: editedItems[index].name,
+        price: parseFloat(editedItems[index].price) || 0
+      };
+
+      setOcrResults({
+        ...ocrResults,
+        items: updatedItems
+      });
+    }
+
+    setEditingItemIndex(null);
+  }
+
+  const updateEditedItem = (index, field, value) => {
+    setEditedItems({
+      ...editedItems,
+      [index]: {
+        ...editedItems[index],
+        [field]: value
+      }
+    });
+  }
+
+  const deleteItem = (index) => {
+
+  }
+
+  const addNewItem = () => {
+    const newItem = {name: 'New Item', price: 0};
+    const updatedItems = [...ocrResults.items, newItem];
+
+    setOcrResults({
+      ...ocrResults,
+      items: updatedItems,
+      items_found: updatedItems.length
+    });
+  }
+
+  
+
   const splits = calculateSplit();
 
 
@@ -203,6 +261,14 @@ function App() {
               people={people}
               itemAssignments={itemAssignments}
               onSetPerson={setPersonItem}
+              editingItemIndex={editingItemIndex}
+              editedItems={editedItems}
+              onStartEditing={startEditingItem}
+              onCancelEditing={cancelEditingItem}
+              onSaveEditing={saveEditedItem}
+              onUpdateEditing={updateEditedItem}
+              onDeleteItem={deleteItem}
+              onAddItem={addNewItem}
             />
 
             <SplitSummary

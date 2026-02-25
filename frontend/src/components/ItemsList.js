@@ -1,38 +1,49 @@
 import React from 'react';
 import '../styles/ItemsList.css';
 
+import ItemCard from './ItemCard';
+
+
 
 
 function ItemsList ({
     items,
     people,
     itemAssignments,
-    onSetPerson
+    onSetPerson,
+    editingItemIndex,
+    editedItems,
+    onStartEditing,
+    onCancelEditing,
+    onSaveEditing,
+    onUpdateEditing,
+    onDeleteItem,
+    onAddItem
 }) {
     return (
         <div className="results-container">
-            <h2>Assign Items!</h2>
+            <div className="items-header">
+                <h2>Assign Items!</h2>
+                <button 
+                    onClick={onAddItem}
+                    className="add-item-btn"
+                >
+                    ➕ Add Item
+                </button>
+            </div>
+
             <div className="items-list">
                 {items.map((item, itemIndex) => (
                     <div key={itemIndex} className="item-card">
-                        <div className="item-info">
-                            <span className="item-name">{item.name}</span>
-                            <span className="item-price">${item.price.toFixed(2)}</span>
-                        </div>
-
-                        {people.length > 0 && (
-                            <div className="person-buttons">
-                                {people.map((person, personIndex) => (
-                                    <button
-                                        key={personIndex}
-                                        className={`person-toggle ${(itemAssignments[itemIndex] || []).includes(person) ? 'active' : ''}`}
-                                        onClick={() => onSetPerson(itemIndex, person)}
-                                    >
-                                        {person}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+                        <ItemCard
+                            item={item}
+                            itemIndex={itemIndex}
+                            people={people}
+                            itemAssignments={itemAssignments}
+                            onSetPerson={onSetPerson}
+                            onStartEditing={onStartEditing}
+                            onDeleteItem={onDeleteItem}
+                        />
                     </div>
                 ))}
             </div>
