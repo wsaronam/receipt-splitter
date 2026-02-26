@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import React, {useState} from 'react';
 import './App.css';
 import logo from './logo.svg';
@@ -204,7 +206,24 @@ function App() {
   }
 
   const deleteItem = (index) => {
+    const updatedItems = ocrResults.items.filter((_, i) => i !== index);
+    setOcrResults({
+      ...ocrResults,
+      items: updatedItems,
+      items_found: updatedItems.length
+    });
 
+    const newAssignments = {...itemAssignments};
+    delete newAssignments[index];
+
+    const reindexedAssignments = {};
+    Object.keys(newAssignments).forEach(key => {
+      const oldIndex = parseInt(key);
+      const newIndex = oldIndex > index ? oldIndex - 1 : oldIndex;
+      reindexedAssignments[newIndex] = newAssignments[key];
+    })
+
+    setItemAssignments(reindexedAssignments);
   }
 
   const addNewItem = () => {

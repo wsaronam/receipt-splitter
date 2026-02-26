@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/ItemsList.css';
 
 import ItemCard from './ItemCard';
+import ItemEditMode from './ItemEditMode';
 
 
 
@@ -35,15 +36,27 @@ function ItemsList ({
             <div className="items-list">
                 {items.map((item, itemIndex) => (
                     <div key={itemIndex} className="item-card">
-                        <ItemCard
-                            item={item}
-                            itemIndex={itemIndex}
-                            people={people}
-                            itemAssignments={itemAssignments}
-                            onSetPerson={onSetPerson}
-                            onStartEditing={onStartEditing}
-                            onDeleteItem={onDeleteItem}
-                        />
+                        {editingItemIndex === itemIndex ? (
+                            <ItemEditMode
+                                item={item}
+                                itemIndex={itemIndex}
+                                editedItems={editedItems}
+                                onUpdateEditing={onUpdateEditing}
+                                onSaveEditing={onSaveEditing}
+                                onCancelEditing={onCancelEditing}
+                            />
+                        ) : (
+                            <ItemCard
+                                item={item}
+                                itemIndex={itemIndex}
+                                people={people}
+                                itemAssignments={itemAssignments}
+                                onSetPerson={onSetPerson}
+                                onStartEditing={onStartEditing}
+                                onDeleteItem={onDeleteItem}
+                            />
+                        )}
+                        
                     </div>
                 ))}
             </div>
