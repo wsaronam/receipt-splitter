@@ -1,0 +1,58 @@
+.item-edit-mode {
+    padding: 10px 0;
+}
+
+.edit-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.edit-inputs input:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+.edit-name-input {
+    flex: 2;
+    padding: 10px;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.edit-price-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.save-btn {
+    flex: 1;
+    padding: 10px;
+    background: #28a745;
+    font-size: 0.95em;
+}
+
+.save-btn:hover {
+    background: #218838;
+}
+
+.cancel-btn {
+    flex: 1;
+    padding: 10px;
+    background: #dc3545;
+    font-size: 0.95em;
+}
+
+.canel-btn:hover {
+    background: #c82333;
+}
