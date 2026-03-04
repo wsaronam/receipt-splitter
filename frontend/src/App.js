@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import './App.css';
 import logo from './logo.svg';
 
+import ReceiptHistory from './components/ReceiptHistory';
 import ReceiptUpload from './components/ReceiptUpload';
 import ItemsList from './components/ItemsList';
 import PeopleManager from './components/PeopleManager';
@@ -13,6 +14,7 @@ import SplitSummary from './components/SplitSummary';
 
 
 function App() {
+  
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -237,6 +239,21 @@ function App() {
     });
   }
 
+
+  const handleSaveReceipt = () => {
+    const receiptData = {
+      filename: ocrResults.filename,
+      items: ocrResults.items,
+      people: people,
+      assignments: itemAssignments,
+      splits: calculateSplit()
+    };
+  }
+
+  const handleLoadReceipt = (receipt) => {
+
+  }
+
   
 
   const splits = calculateSplit();
@@ -254,6 +271,8 @@ function App() {
 
       <div className="upload-container">
 
+        <ReceiptHistory onLoadReceipt={handleLoadReceipt} />
+
         <ReceiptUpload
           preview={preview}
           onFileSelect={handleFileSelect}
@@ -267,6 +286,12 @@ function App() {
 
         {ocrResults && ocrResults.items && ocrResults.items.length > 0 && (
           <div>
+            <div className="save-receipt-section">
+              <button onClick={handleSaveReceipt} className="save-receipt-btn">
+                Save Receipt to History
+              </button>
+            </div>
+
             <PeopleManager
               people={people}
               newPersonName={newPersonName}
