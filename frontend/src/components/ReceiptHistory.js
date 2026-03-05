@@ -6,7 +6,7 @@ import { getReceipts, saveReceipt, deleteReceipt, clearAllReceipts } from '../ut
 
 
 
-function ReceiptHistory({onLoadReceipt}) {
+function ReceiptHistory({ onLoadReceipt, refreshTrigger }) {
     const [receipts, setReceipts] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     
@@ -15,7 +15,7 @@ function ReceiptHistory({onLoadReceipt}) {
     
     useEffect(() => {
         loadReceipts();
-    }, []);
+    }, [refreshTrigger]);
 
     const loadReceipts = () => {
         const saved = getReceipts();
@@ -24,6 +24,7 @@ function ReceiptHistory({onLoadReceipt}) {
 
 
     const handleDelete = (id) => {
+        console.log('handleDelete called by:', id);
         if (window.confirm('Are you sure you want to delete this receipt?')) {
             deleteReceipt(id);
             loadReceipts();
@@ -45,7 +46,11 @@ function ReceiptHistory({onLoadReceipt}) {
 
     if (!isOpen) {
         return (
-            <button onClick={() => setIsOpen(true)} className="history-toggle-btn">
+            <button onClick={(e) => {
+                console.log('view history button pressed');
+                e.stopPropagation();
+                setIsOpen(true);
+                }} className="history-toggle-btn">
                 View History ({receipts.length})
             </button>
         );
@@ -95,10 +100,10 @@ function ReceiptHistory({onLoadReceipt}) {
                             </div>
 
                             <div className="history-item-actions">
-                                <button onClick={handleLoad(receipt)} className="load-btn">
+                                <button onClick={() => handleLoad(receipt)} className="load-btn">
                                     Load
                                 </button>
-                                <button onClick={handleDelete(receipt.id)} className='delete-btn'>
+                                <button onClick={() => handleDelete(receipt.id)} className='delete-btn'>
                                     Delete
                                 </button>
                             </div>

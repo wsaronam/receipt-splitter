@@ -9,6 +9,7 @@ import ReceiptUpload from './components/ReceiptUpload';
 import ItemsList from './components/ItemsList';
 import PeopleManager from './components/PeopleManager';
 import SplitSummary from './components/SplitSummary';
+import { saveReceipt } from './utils/storage';
 
 
 
@@ -27,6 +28,9 @@ function App() {
 
   const [editingItemIndex, setEditingItemIndex] = useState(null);
   const [editedItems, setEditedItems] = useState({});
+
+  const [savedReceiptId, setSavedReceiptId] = useState(null);
+  const [historyRefresh, setHistoryRefresh] = useState(0);
 
 
 
@@ -248,10 +252,30 @@ function App() {
       assignments: itemAssignments,
       splits: calculateSplit()
     };
+
+    if (!ocrResults || !ocrResults.items || ocrResults.items.length === 0) {
+      alert('No receipt to save!');
+      return;
+    }
+
+    const saved = saveReceipt(receiptData);
+    if (saved) {
+      setSavedReceiptId(saved.id);
+      setHistoryRefresh(prev => prev + 1);
+      alert('Receipt saved!');
+    }
   }
 
   const handleLoadReceipt = (receipt) => {
-
+    setOcrResults({
+      items: receipt.items,
+      filename: receipt.filename,
+      items_found: receipt.items.length
+    });
+    setPeople(receipt.people || []);
+    setItemAssignments(receipt.assignments || {});
+    setSavedReceiptId(receipt.id);
+    setUploadStatus('Receipt loaded from history');
   }
 
   
@@ -271,7 +295,10 @@ function App() {
 
       <div className="upload-container">
 
-        <ReceiptHistory onLoadReceipt={handleLoadReceipt} />
+        <ReceiptHistory 
+          onLoadReceipt={handleLoadReceipt} 
+          refreshTrigger={historyRefresh}
+        />
 
         <ReceiptUpload
           preview={preview}
