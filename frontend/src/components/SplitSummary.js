@@ -6,38 +6,35 @@ import '../styles/SplitSummary.css';
 
 function SplitSummary({
     splits,
-    rawText
+    rawText,
+    items
 }) {
 
-    console.log("p1")
-
     const total = Object.values(splits).reduce((sum, val) => sum + val, 0);
-    console.log("p2")
+    const receiptTotal = items ? items.reduce((sum, item) => sum + item.price, 0) : 0;
     const people = Object.keys(splits);
-    console.log("p3")
-    if (people.length === 0) {
-        return null;
-    }
 
-    console.log("p4")
+
 
 
     return (
         <div className="split-summary">
-            <h2>Split Summary</h2>
-            <div className="split-cards">
-                {people.map((person, index) => (
-                    <div key={index} className="split-card">
-                        <div className="person-name">{person}</div>
-                        <div className="person-total">${splits[person].toFixed(2)}</div>
+            {people.length > 0 ? (
+                <div>
+                    <h2>Split Summary</h2>
+                    <div className="split-cards">
+                        {people.map((person, index) => (
+                            <div key={index} className="split-card">
+                                <div className="person-name">{person}</div>
+                                <div className="person-total">${splits[person].toFixed(2)}</div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-
-            {/* <div className="total-price">
-                <strong>Total: </strong>
-                ${items.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
-            </div> */}
+                </div>
+            ) : (
+                <h2>Receipt Total</h2>
+            )}
+            
 
             <div className="total-price">
                 <strong>Total: </strong>
@@ -51,7 +48,7 @@ function SplitSummary({
                 </details>
             )}
         </div>
-    )
+    );
 }
 
 

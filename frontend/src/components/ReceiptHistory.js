@@ -99,7 +99,7 @@ function ReceiptHistory({ onLoadReceipt, refreshTrigger }) {
                                 </div>
                             </div>
 
-                            <div className="history-item-actions">
+                            <div className="history-card-actions">
                                 <button onClick={() => handleLoad(receipt)} className="load-btn">
                                     Load
                                 </button>

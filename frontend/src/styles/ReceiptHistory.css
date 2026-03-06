@@ -1,0 +1,138 @@
+.history-toggle-btn {
+    margin-bottom: 20px;
+    padding: 12px 24px;
+    font-size: 1em;
+    width: 100%;
+}
+
+
+.history-container {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9ff;
+    border-radius: 15px;
+    border: 2px solid #667eea;
+}
+
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-header h2 {
+    color: #667eea;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.history-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.clear-all-btn {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    background: #db3546;
+}
+
+.clear-all-btn:hover {
+    background: #c51729;
+}
+
+.close-btn {
+    padding: 8px 16px;
+    font-size: 1em;
+    background: #69727a;
+}
+
+.close-btn:hover {
+    background: #444a4e;
+}
+
+
+.no-history {
+    text-align: center;
+    padding: 40px 20px;
+    color: #636363;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #dfdfdf;
+    transition: all 0.2s ease;
+}
+
+.history-card:hover {
+    border-color:#667eea;
+    box-shadow: 0 2px 8px #211b58;
+}
+
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.history-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.history-card-info strong {
+    color: #333333;
+    font-size: 1.1em;
+}
+
+.history-timestamp {
+    color: #636363;
+    font-size: 0.85em;
+}
+
+.history-card-stats {
+    display: flex;
+    gap: 15px;
+    color: #667eea;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.history-card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+.load-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 0.9em;
+    background: #667eea;
+}
+
+.load-btn:hover {
+    background: #323f8a;
+}
+
+.delete-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    background: #da3445;
+}
+
+.delete-btn:hover {
+    background: #b61c2b;
+}

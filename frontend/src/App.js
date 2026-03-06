@@ -245,18 +245,19 @@ function App() {
 
 
   const handleSaveReceipt = () => {
+    if (!ocrResults || !ocrResults.items || ocrResults.items.length === 0) {
+      alert('No receipt to save!');
+      return;
+    }
+
     const receiptData = {
       filename: ocrResults.filename,
       items: ocrResults.items,
       people: people,
       assignments: itemAssignments,
-      splits: calculateSplit()
+      splits: calculateSplit(),
+      raw_text: ocrResults.raw_text
     };
-
-    if (!ocrResults || !ocrResults.items || ocrResults.items.length === 0) {
-      alert('No receipt to save!');
-      return;
-    }
 
     const saved = saveReceipt(receiptData);
     if (saved) {
@@ -270,7 +271,8 @@ function App() {
     setOcrResults({
       items: receipt.items,
       filename: receipt.filename,
-      items_found: receipt.items.length
+      items_found: receipt.items.length,
+      raw_text: receipt.raw_text || ''
     });
     setPeople(receipt.people || []);
     setItemAssignments(receipt.assignments || {});
@@ -345,6 +347,7 @@ function App() {
             <SplitSummary
               splits={splits}
               rawText={ocrResults.raw_text}
+              items={ocrResults.items}
             />
           </div>
         )}
