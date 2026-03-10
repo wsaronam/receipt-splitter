@@ -29,7 +29,6 @@ function App() {
   const [editingItemIndex, setEditingItemIndex] = useState(null);
   const [editedItems, setEditedItems] = useState({});
 
-  const [savedReceiptId, setSavedReceiptId] = useState(null);
   const [historyRefresh, setHistoryRefresh] = useState(0);
 
 
@@ -77,18 +76,15 @@ function App() {
     formData.append('receipt', selectedFile);
     
     try {
-      console.log('sending file:', selectedFile.name);
       const response = await fetch('http://localhost:5000/upload', {
         method: 'POST',
         body: formData,
       });
 
-      console.log('response status: ' + response.status);
       const data = await response.json();
       if (response.ok) {
         setUploadStatus(`Receipt uploaded successfully.  Found ${data.items_found} items`);
         setOcrResults(data);
-        console.log('server response: ' + JSON.stringify(data, null, 2));
       }
       else {
         setUploadStatus('Upload failed: ' + data.error);
@@ -130,8 +126,6 @@ function App() {
   };
 
   const setPersonItem = (index, name) => {
-    console.log('clicked item:', index, 'person:', name);
-    console.log('current assignments:', itemAssignments);
     const currentAssignments = itemAssignments[index] || [];
     if (currentAssignments.includes(name)) {
       setItemAssignments({
@@ -261,7 +255,6 @@ function App() {
 
     const saved = saveReceipt(receiptData);
     if (saved) {
-      setSavedReceiptId(saved.id);
       setHistoryRefresh(prev => prev + 1);
       alert('Receipt saved!');
     }
@@ -276,7 +269,6 @@ function App() {
     });
     setPeople(receipt.people || []);
     setItemAssignments(receipt.assignments || {});
-    setSavedReceiptId(receipt.id);
     setUploadStatus('Receipt loaded from history');
   }
 

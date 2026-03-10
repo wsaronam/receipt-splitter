@@ -10,7 +10,9 @@ function SplitSummary({
     items
 }) {
 
-    const total = Object.values(splits).reduce((sum, val) => sum + val, 0);
+    // total for the amount owed by everybody (this excludes items on the receipt and not assigned to anyone)
+    //const total = Object.values(splits).reduce((sum, val) => sum + val, 0);
+    
     const receiptTotal = items ? items.reduce((sum, item) => sum + item.price, 0) : 0;
     const people = Object.keys(splits);
 
@@ -38,7 +40,7 @@ function SplitSummary({
 
             <div className="total-price">
                 <strong>Total: </strong>
-                ${total.toFixed(2)}
+                ${receiptTotal.toFixed(2)}
             </div>
 
             {rawText && (

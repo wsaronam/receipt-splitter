@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/ReceiptHistory.css';
 
-import { getReceipts, saveReceipt, deleteReceipt, clearAllReceipts } from '../utils/storage.js';
+import { getReceipts, deleteReceipt, clearAllReceipts } from '../utils/storage.js';
 
 
 
@@ -24,7 +24,6 @@ function ReceiptHistory({ onLoadReceipt, refreshTrigger }) {
 
 
     const handleDelete = (id) => {
-        console.log('handleDelete called by:', id);
         if (window.confirm('Are you sure you want to delete this receipt?')) {
             deleteReceipt(id);
             loadReceipts();
@@ -47,7 +46,6 @@ function ReceiptHistory({ onLoadReceipt, refreshTrigger }) {
     if (!isOpen) {
         return (
             <button onClick={(e) => {
-                console.log('view history button pressed');
                 e.stopPropagation();
                 setIsOpen(true);
                 }} className="history-toggle-btn">
